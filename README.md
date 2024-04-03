@@ -1,4 +1,4 @@
-Calibrating the sensitivities of the various Wildlife Acoustics microphones, programs and SongMeter models for Dr. Jesse Barber's Sensory Ecology Lab at Boise State University.
+Calibrating the sensitivities of the various Wildlife Acoustics microphones, programs and SongMeter models.
 
 Project starting Spring 2024
 
