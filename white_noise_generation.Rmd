@@ -11,18 +11,49 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Generating white noise for use in ultrasonic microphone calibration
 
-Goal: Generate broad-spectrum white noise for playback test of WildLife Acoustics microphone and Song Meter acoustic recording units sensitivities.
+Goal: Generate broad-spectrum, ultrasonic white noise .wav file.
+
+Why?: Why not? ...To be used for calibration of WildLife Acoustics microphone and Song Meter acoustic recording unit sensitivities.
 
 ```{r packages}
 library(tuneR)
+library(seewave)
 ```
 
-## Including Plots
+Create white noise file
 
-You can also embed plots, for example:
+Settings:
+Butterworth band-pass filter (1-90 kHz pass)
+Fade-in & Fade-out = 10 msec
+Sample rate = 192 kHz
+Bit depth = 16 (PCM)
+Duration = 2 seconds
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r noise}
+whitenoise <- noise(kind = "white",
+                    samp.rate = 192000,
+                    bit = 16,
+                    pcm = TRUE,
+                    duration = 2, 
+                    xunit = "time") #xunit time defaults to seconds
+
+# oscillo(whitenoise) #oscillogram of unedited white noise
+# meanspec(whitenoise,  wl = 1024) #spectrogram of unedited white noise
+writeWave(whitenoise, filename = "ultrasound_white_noise.wav") #unfiltered/unedited .wav
+
+filtered_whitenoise <- bwfilter(whitenoise, n = 5, from = 1000, to = 90000, bandpass = TRUE, output = "Wave") # band-pass filter
+filtered_whitenoise <- fadew(filtered_whitenoise, din = 0.010, dout = 0.010, shape = "exp", output = "Wave") # 10 msec fade in and fade out
+
+savewav(filtered_whitenoise, filename = "1to90kHz_bandpass_ultrasound_white_noise.wav") #final file save as .wav
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Oscillogram
+``` {r oscillo}
+oscillo(filtered_whitenoise)
+```
+
+## Power spectrum
+``` {r powerspec}
+meanspec(filtered_whitenoise,  wl = 256)
+```
+
