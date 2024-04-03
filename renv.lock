@@ -316,6 +316,21 @@
       ],
       "Hash": "d53dbfddf695303ea4ad66f86e99b95d"
     },
+    "seewave": {
+      "Package": "seewave",
+      "Version": "2.2.3",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Requirements": [
+        "grDevices",
+        "graphics",
+        "methods",
+        "stats",
+        "tuneR",
+        "utils"
+      ],
+      "Hash": "a134938f0b5c36574c615bdf387e7382"
+    },
     "signal": {
       "Package": "signal",
       "Version": "1.8-0",
