@@ -1,0 +1,88 @@
+---
+title: "Pure tones"
+author: "Brian C Leavell"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Generating pure tones for use in ultrasonic microphone calibration
+
+Goal: Generate 3 pure tones as .wav file.
+
+Why?: Why not? ...To be used for calibration of WildLife Acoustics microphone and Song Meter acoustic recording unit sensitivities.
+
+```{r packages}
+library(seewave)
+```
+
+Create files
+
+Settings:
+Pure tones in sequence: 10 kHz, 35 kHz, 50 kHz
+Sine waves
+Fade-in & Fade-out = 10 msec
+Sample rate = 192 kHz
+Bit depth = 16 (PCM)
+Duration = 1 second per tone, 0.5 second intervals (4.5 seconds total file duration)
+
+```{r tone}
+#10 kHz tone
+kHz_10 <- synth(f = 192000,
+                cf = 10000,
+                d = 1,
+                a = 1,
+                signal = "sine",
+                output = "Wave"
+                )
+
+kHz_35 <- synth(f = 192000,
+                cf = 35000,
+                d = 1,
+                a = 1,
+                signal = "sine",
+                output = "Wave"
+                )
+
+kHz_50 <- synth(f = 192000,
+                cf = 50000,
+                d = 1,
+                a = 1,
+                signal = "sine",
+                output = "Wave"
+                )
+
+# 10 msec fade in and fade out
+kHz_10 <- fadew(kHz_10, din = 0.010, dout = 0.010, shape = "exp", output = "Wave") 
+kHz_35 <- fadew(kHz_35, din = 0.010, dout = 0.010, shape = "exp", output = "Wave")
+kHz_50 <- fadew(kHz_50, din = 0.010, dout = 0.010, shape = "exp", output = "Wave")
+
+#Add silence to each file
+kHz_10 <- addsilw(kHz_10, at = "end", d = 0.5, output = "Wave")
+kHz_35 <- addsilw(kHz_35, at = "end", d = 0.5, output = "Wave")
+kHz_50 <- addsilw(kHz_50, at = "end", d = 0.5, output = "Wave")
+
+#Join audio files
+a <- pastew(kHz_35, kHz_10, output = "Wave")
+puretones <- pastew(kHz_50, a, output = "Wave")
+
+savewav(puretones, filename = "puretones_10_35_50kHz.wav") #final file save as .wav
+```
+
+## Oscillogram
+``` {r oscillo}
+oscillo(puretones)
+```
+
+## Power spectrum
+``` {r powerspec}
+meanspec(puretones,  wl = 1024)
+```
+
+## Spectrogram
+``` {r spectrogram}
+spectro(puretones,  wl = 1024)
+```
