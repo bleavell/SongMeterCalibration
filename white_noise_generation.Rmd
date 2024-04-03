@@ -1,0 +1,28 @@
+---
+title: "white noise generation"
+author: "Brian C Leavell"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Generating white noise for use in ultrasonic microphone calibration
+
+Goal: Generate broad-spectrum white noise for playback test of WildLife Acoustics microphone and Song Meter acoustic recording units sensitivities.
+
+```{r packages}
+library(tuneR)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
